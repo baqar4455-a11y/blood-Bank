@@ -14,6 +14,7 @@ from auth import authenticate_user, create_session, get_current_user_from_token
 from matching_engine import MatchingEngine, haversine_distance
 from inventory_manager import InventoryManager
 from notifications import NotificationSystem
+from app import _parse_request_target
 
 class RabtaPlatformTests(unittest.TestCase):
     @classmethod
@@ -24,6 +25,19 @@ class RabtaPlatformTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.conn.close()
+
+    def test_vercel_rewrite_preserves_original_api_path_and_query(self):
+        path, params = _parse_request_target(
+            "/api/index.py?__vercel_path=/api/blood-banks/verified&city=Karachi"
+        )
+        self.assertEqual(path, "/api/blood-banks/verified")
+        self.assertEqual(params, {"city": ["Karachi"]})
+
+        path, params = _parse_request_target(
+            "/api/auth/me?__vercel_path=/api/ignored"
+        )
+        self.assertEqual(path, "/api/auth/me")
+        self.assertEqual(params, {"__vercel_path": ["/api/ignored"]})
 
     def test_01_haversine_distance(self):
         """Test accurate great-circle distance calculation."""

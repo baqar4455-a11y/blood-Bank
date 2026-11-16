@@ -6,10 +6,12 @@ Multi-threaded, resilient backend serving RESTful APIs and frontend SPA.
 import sys
 import os
 import json
+import secrets
 import urllib.parse
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timezone
 import sqlite3
+from typing import Any
 
 # Import application components
 from database import get_db, init_db, hash_password
@@ -23,6 +25,18 @@ from notifications import NotificationSystem
 
 PORT = int(os.environ.get("RABTA_PORT", 8080))
 FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+
+def _parse_request_target(request_target: str) -> tuple[str, dict[str, list[str]]]:
+    parsed = urllib.parse.urlparse(request_target)
+    params = urllib.parse.parse_qs(parsed.query)
+
+    if parsed.path == "/api/index.py":
+        original_path = params.pop("__vercel_path", [None])[0]
+        if original_path and original_path.startswith("/api/"):
+            return original_path, params
+
+    return parsed.path, params
+
 
 class RabtaRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -67,9 +81,7 @@ class RabtaRequestHandler(SimpleHTTPRequestHandler):
 
     # ==================== GET REQUEST ROUTER ====================
     def do_GET(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
-        params = urllib.parse.parse_qs(parsed.query)
+        path, params = _parse_request_target(self.path)
 
         # Static file fallback if not /api
         if not path.startswith('/api/'):
@@ -567,8 +579,7 @@ class RabtaRequestHandler(SimpleHTTPRequestHandler):
 
     # ==================== POST REQUEST ROUTER ====================
     def do_POST(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
+        path, _ = _parse_request_target(self.path)
 
         if not path.startswith('/api/'):
             return self._send_error("Not found", 404)
@@ -961,8 +972,7 @@ class RabtaRequestHandler(SimpleHTTPRequestHandler):
 
     # ==================== PUT REQUEST ROUTER ====================
     def do_PUT(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
+        path, _ = _parse_request_target(self.path)
 
         if not path.startswith('/api/'):
             return self._send_error("Not found", 404)
