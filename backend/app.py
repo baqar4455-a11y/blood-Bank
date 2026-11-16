@@ -85,6 +85,10 @@ class RabtaRequestHandler(SimpleHTTPRequestHandler):
 
         # Static file fallback if not /api
         if not path.startswith('/api/'):
+            if path.startswith('/frontend/'):
+                self.path = self.path[len('/frontend'):]
+                path = path[len('/frontend'):]
+
             # SPA fallback: if file doesn't exist, serve index.html
             local_path = os.path.join(FRONTEND_DIR, path.lstrip('/'))
             if not os.path.exists(local_path) or os.path.isdir(local_path):

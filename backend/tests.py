@@ -7,14 +7,17 @@ import unittest
 import sqlite3
 import os
 import json
+import threading
 from datetime import datetime, timezone
+from http.server import ThreadingHTTPServer
+from urllib.request import urlopen
 
 from database import init_db, get_db, hash_password
 from auth import authenticate_user, create_session, get_current_user_from_token
 from matching_engine import MatchingEngine, haversine_distance
 from inventory_manager import InventoryManager
 from notifications import NotificationSystem
-from app import _parse_request_target
+from app import RabtaRequestHandler, _parse_request_target
 
 class RabtaPlatformTests(unittest.TestCase):
     @classmethod
@@ -38,6 +41,33 @@ class RabtaPlatformTests(unittest.TestCase):
         )
         self.assertEqual(path, "/api/auth/me")
         self.assertEqual(params, {"__vercel_path": ["/api/ignored"]})
+
+    def test_vercel_static_rewrite_destinations_serve_assets(self):
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(project_root, "vercel.json"), encoding="utf-8") as file:
+            rewrites = json.load(file)["rewrites"]
+        destinations = {rewrite["source"]: rewrite["destination"] for rewrite in rewrites}
+
+        static_routes = [
+            (destinations["/css/(.*)"].replace("$1", "styles.css"), "text/css", "--bg-dark"),
+            (destinations["/js/(.*)"].replace("$1", "app.js"), "javascript", "const App"),
+            (destinations["/(.*)"], "text/html", 'href="css/styles.css"'),
+        ]
+        server = ThreadingHTTPServer(("127.0.0.1", 0), RabtaRequestHandler)
+        server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+        server_thread.start()
+        try:
+            for path, content_type, marker in static_routes:
+                with self.subTest(path=path), urlopen(
+                    f"http://127.0.0.1:{server.server_port}{path}"
+                ) as response:
+                    body = response.read().decode("utf-8")
+                    self.assertIn(content_type, response.headers.get_content_type())
+                    self.assertIn(marker, body)
+        finally:
+            server.shutdown()
+            server.server_close()
+            server_thread.join()
 
     def test_01_haversine_distance(self):
         """Test accurate great-circle distance calculation."""
