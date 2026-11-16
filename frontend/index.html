@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RABTA — Connecting Lives. One Donation at a Time.</title>
+  <meta name="description" content="RABTA connects people in need of blood with eligible voluntary donors and verified blood banks in Karachi, Pakistan through an intelligent matching and real-time inventory system." />
+  
+  <!-- Favicon with Medical Red Blood Drop & ECG Heartbeat -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E11D48'%3E%3Cpath d='M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z'/%3E%3Cpath d='M7 14h2l1.5-3 2.5 6 2-4h2.5' stroke='%23FFFFFF' stroke-width='1.8' fill='none'/%3E%3C/svg%3E" />
+
+  <!-- Core Dark Theme Medical Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app-container">
+    <!-- Dynamic Navigation Header -->
+    <div id="navbar-container"></div>
+
+    <!-- Dynamic Router View Container -->
+    <main id="app-view"></main>
+
+    <!-- Professional Medical Regulatory Footer -->
+    <footer class="rabta-footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+            <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--red-primary); display: flex; align-items: center; justify-content: center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: #fff;">
+              RABTA<span style="color: var(--red-primary);">.</span>
+            </div>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+            Connecting Lives. One Donation at a Time. Pakistan's unified healthcare technology platform for emergency blood donation, real-time hospital inventory management, and verified donor mobilization.
+          </p>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-dim);">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green);"></span>
+            Transfusion Coordination Engine Operational
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Platform Portals</h4>
+          <ul>
+            <li><a href="#/request-blood">Request Emergency Blood</a></li>
+            <li><a href="#/register-donor">Voluntary Donor Registry</a></li>
+            <li><a href="#/register-bank">Blood Bank Enrollment</a></li>
+            <li><a href="#/live-availability">Live 8-Group Availability</a></li>
+            <li><a href="#/blood-banks">Karachi Blood Bank Map</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Healthcare Standards</h4>
+          <ul>
+            <li><a href="#/how-it-works">Transfusion Workflow</a></li>
+            <li><a href="#/platform-impact">Audited Impact Analytics</a></li>
+            <li><a href="#/about-rabta">Clinical Safety Protocol</a></li>
+            <li><a href="#/about-rabta">Privacy & Consent Terms</a></li>
+            <li><a href="#/about-rabta">Institutional Packages</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Emergency Transfusion Hotline</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            For critical ICU, trauma, or maternity surgical emergencies in Karachi:
+          </p>
+          <div style="font-size: 1.25rem; font-weight: 800; color: var(--red-primary); margin-bottom: 0.5rem;">
+            📞 1122 / +92 21 111-RABTA
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.4;">
+            Support Hours: 24/7 Nationwide Emergency Coordination
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div style="font-size: 0.78rem; color: var(--text-dim);">
+          &copy; 2026 RABTA Healthcare Technologies. All rights reserved. Registered under Transfusion Safety & Healthcare Coordination Standards.
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-dim);">
+          Medical Disclaimer: Final ABO/Rh cross-matching and transfusion authorization is performed exclusively by licensed hospital personnel.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JavaScript Modules in Strict Dependency Order -->
+  <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/components/navbar.js"></script>
+  <script src="js/components/auth_modal.js"></script>
+  <script src="js/components/notifications_modal.js"></script>
+
+  <!-- Views -->
+  <script src="js/views/home.js"></script>
+  <script src="js/views/request_form.js"></script>
+  <script src="js/views/donor_reg.js"></script>
+  <script src="js/views/bank_reg.js"></script>
+  <script src="js/views/requester_dash.js"></script>
+  <script src="js/views/donor_dash.js"></script>
+  <script src="js/views/bank_dash.js"></script>
+  <script src="js/views/live_stock.js"></script>
+  <script src="js/views/bank_map.js"></script>
+  <script src="js/views/impact.js"></script>
+  <script src="js/views/admin_dash.js"></script>
+  <script src="js/views/info_views.js"></script>
+
+  <!-- Application Bootstrap & Router -->
+  <script src="js/app.js"></script>
+</body>
+</html>

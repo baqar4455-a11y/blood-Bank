@@ -1,0 +1,35 @@
+# Environment & Secrets (Never commit credentials or tokens)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+
+# Vercel Deployment & Build Artifacts
+.vercel/
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime Database Journals & Logs
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.log
